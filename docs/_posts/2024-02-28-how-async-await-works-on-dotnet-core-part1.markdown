@@ -136,12 +136,11 @@ public static class DelayHelper
         private TaskAwaiter <>u__1;
         
         private void MoveNext()
-				{
-				    ...
-				}
-				
-			  ...
-		}
+        {
+          ...
+        }
+        ...
+    }
 }
 {% endhighlight %}
 
@@ -153,7 +152,9 @@ Within this state machine, a field named *<>1__state* plays a crucial role. It a
 
 The state machine also stores **TaskAwaiter** fields, one for each await keyword used in your code. In this case, since your code only employs a single await, there's just one such field.
 
-**await Task.Delay(tenSec);**
+{% highlight csharp %}
+await Task.Delay(tenSec);
+{% endhighlight %}
 
 The **TaskAwaiter** plays a key role in managing asynchronous operations. It essentially holds the awaited task and schedules a callback to our state machine's *MoveNext* method once the task completes. This ensures the state machine resumes correctly at the appropriate point using the state as a checkpoint.
 
@@ -189,7 +190,9 @@ Finally, the method returns the **Task** created by the builder. This **Task** a
 
 Let's now dive into the *MoveNext* method implementation. While the code itself is fairly straightforward, I've added comments to better understanding. Remember, the first call to MoveNext happens when the builder invokes the *Start* method within *DelayBy10Sec*.
 
-**stateMachine.<>t__builder.Start(ref stateMachine);**
+{% highlight csharp %}
+stateMachine.<>t__builder.Start(ref stateMachine);
+{% endhighlight %}
 
 {% highlight csharp %}
 private void MoveNext()
@@ -250,7 +253,9 @@ private void MoveNext()
 
 A potentially confusing aspect is the validation of the awaiter to check if its task has completed. Here's why: when you call a task and retrieve its awaiter...
 
-**awaiter = Task.Delay(<tenSec>5__1).GetAwaiter();**
+{% highlight csharp %}
+awaiter = Task.Delay(<tenSec>5__1).GetAwaiter();
+{% endhighlight %}
 
 The task might complete before the validation finishes. In such scenarios, scheduling a continuation callback to *MoveNext* would be unnecessary. This allows the task to complete synchronously
 
