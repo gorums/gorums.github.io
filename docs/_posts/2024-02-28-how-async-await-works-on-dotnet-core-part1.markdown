@@ -3,6 +3,8 @@ layout: post
 title:  "How async/await works on dotnet core. Part 1"
 date:   2024-02-28 09:56:51 -0500
 categories: dotnet
+tags: dotnet
+author: "Alejandro Ferrandiz"
 ---
 > Note: The way async/await is handled internally by the runtime is an implementation detail, meaning it can change in the future. You should avoid basing your code on the specific internal implementation. However, this doesn't limit how you can use it.
 
