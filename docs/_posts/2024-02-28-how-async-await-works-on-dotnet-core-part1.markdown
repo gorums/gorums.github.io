@@ -22,7 +22,7 @@ Let's check a simple example of a delay task helper and the compiler transformat
 // Our delay helper class
 public static class DelayHelper
 {
-		// Delay 10 seconds
+    // Delay 10 seconds
     public static async Task DelayBy10Sec()
     {
         int tenSec = 10 * 1000;
@@ -134,8 +134,8 @@ public static class DelayHelper
         private int <tenSec>5__1;
 
         private TaskAwaiter <>u__1;
-
-				private void MoveNext()
+        
+        private void MoveNext()
 				{
 				    ...
 				}
@@ -198,51 +198,51 @@ private void MoveNext()
     try
     {
         TaskAwaiter awaiter;
-				// state can be -1, 0 and -2 based on this example. state 0 means the awaiter was called, 
-				//-1 if is the initial state or -2 if our task is done, in this case we can have only -1 and 0
+        // state can be -1, 0 and -2 based on this example. state 0 means the awaiter was called,
+        // -1 if is the initial state or -2 if our task is done, in this case we can have only -1 and 0
         if (num != 0)
         {
-						// set the 10 sec
+            // set the 10 sec
             <tenSec>5__1 = 10000;
-						// we call the Task and obtain the awaiter
+            // we call the Task and obtain the awaiter
             awaiter = Task.Delay(<tenSec>5__1).GetAwaiter();
-						// we validate if the awaiter is completed here, if that is the case
-						// means that we can treate this call as a sync one and we dont need 
-						// to allocate space in the heap calling AwaitUnsafeOnCompleted method for the builder
+            // we validate if the awaiter is completed here, if that is the case
+            // means that we can treate this call as a sync one and we dont need
+            // to allocate space in the heap calling AwaitUnsafeOnCompleted method for the builder
             if (!awaiter.IsCompleted)
             {
-								// if is not completed the awaiter change state to 0
+                // if is not completed the awaiter change state to 0
                 num = (<>1__state = 0);
                 <>u__1 = awaiter;
                 <DelayBy10Sec>d__0 stateMachine = this;
-								//schedule a continuation callback to the MoveNext() when the awaiter is done
+                // schedule a continuation callback to the MoveNext() when the awaiter is done
                 <>t__builder.AwaitUnsafeOnCompleted(ref awaiter, ref stateMachine);
-								// here we return, the awaiter is going to call again when it finished
+                // here we return, the awaiter is going to call again when it finished
                 return;
             }
         }
         else
         {
-						// if state is 0 means that the awaiter is done, and it called MoveNext as a callback
+            // if state is 0 means that the awaiter is done, and it called MoveNext as a callback
             awaiter = <>u__1;
             <>u__1 = default(TaskAwaiter);
             num = (<>1__state = -1);
         }
-				// in this point the awaiter is completed because was done sync or async
-				// if there were and exception inside the awaiter GetResult() is going to 
-				// re-trowing here that is why we have a try catch
+        // in this point the awaiter is completed because was done sync or async
+        // if there were and exception inside the awaiter GetResult() is going to
+        // re-trowing here that is why we have a try catch
         awaiter.GetResult();
     }
     catch (Exception exception)
     {
-				// we set the state to completed and save the exception inside the task
-				// that the builder is handle for us
+        // we set the state to completed and save the exception inside the task
+        // that the builder is handle for us
         <>1__state = -2;
         <>t__builder.SetException(exception);
         return;
     }
-		// in this point the awaiter is completed without exception and we can mark our task 
-		// completed calling the builder method SetResult()
+    // in this point the awaiter is completed without exception and we can mark our task
+    // completed calling the builder method SetResult()
     <>1__state = -2;
     <>t__builder.SetResult();
 }
